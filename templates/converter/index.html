@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website to Joomla Template Converter</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --success: #34a853;
+            --error: #ea4335;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #202124;
+            --text-secondary: #5f6368;
+            --border: #dadce0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        input[type="url"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .file-drop {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg);
+        }
+
+        .file-drop:hover,
+        .file-drop.dragover {
+            border-color: var(--primary);
+            background: rgba(26, 115, 232, 0.05);
+        }
+
+        .file-drop-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .file-drop-text {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .file-drop-hint {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .selected-file {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .selected-file-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .selected-file-remove {
+            background: none;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            filter: brightness(0.9);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results */
+        .results {
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .result-success {
+            background: #e6f4ea;
+            border: 1px solid #34a853;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .result-success-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .result-success h3 {
+            color: var(--success);
+            margin-bottom: 8px;
+        }
+
+        .result-error {
+            background: #fce8e6;
+            border: 1px solid var(--error);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .result-error h3 {
+            color: var(--error);
+            margin-bottom: 8px;
+        }
+
+        .positions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 16px 0;
+        }
+
+        .position-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.875rem;
+        }
+
+        .download-section {
+            margin-top: 24px;
+        }
+
+        /* Code preview */
+        .preview-section {
+            margin-top: 24px;
+        }
+
+        .preview-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-decoration: underline;
+        }
+
+        .preview-code {
+            display: none;
+            margin-top: 16px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .preview-code.show {
+            display: block;
+        }
+
+        /* Progress */
+        .progress-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-overlay.show {
+            display: flex;
+        }
+
+        .progress-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .progress-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .progress-text {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .progress-subtext {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Joomla Template Converter</h1>
+            <p class="subtitle">Convert any website into an installable Joomla 4 template</p>
+        </header>
+
+        <div class="card">
+            <div class="tabs">
+                <button class="tab active" data-tab="url">From URL</button>
+                <button class="tab" data-tab="file">Upload Files</button>
+            </div>
+
+            <form id="converterForm">
+                <!-- URL Tab -->
+                <div class="tab-content active" id="tab-url">
+                    <div class="form-group">
+                        <label for="urlInput">Website URL</label>
+                        <input type="url" id="urlInput" name="url"
+                               placeholder="https://example.com"
+                               autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- File Upload Tab -->
+                <div class="tab-content" id="tab-file">
+                    <div class="file-drop" id="fileDrop">
+                        <div class="file-drop-icon">&#128193;</div>
+                        <div class="file-drop-text">Drop files here or click to browse</div>
+                        <div class="file-drop-hint">Supports ZIP archives or HTML files</div>
+                        <input type="file" id="fileInput" name="file" class="file-input"
+                               accept=".zip,.html,.htm">
+                    </div>
+                    <div class="selected-file" id="selectedFile" style="display: none;">
+                        <span class="selected-file-name" id="fileName"></span>
+                        <button type="button" class="selected-file-remove" id="removeFile">&times;</button>
+                    </div>
+                </div>
+
+                <!-- Template Name -->
+                <div class="form-group" style="margin-top: 24px;">
+                    <label for="templateName">Template Name (optional)</label>
+                    <input type="text" id="templateName" name="template_name"
+                           placeholder="my_joomla_template"
+                           autocomplete="off">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="btn-text">Convert to Joomla Template</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Results -->
+        <div class="results card" id="results">
+            <div class="result-success" id="resultSuccess" style="display: none;">
+                <div class="result-success-icon">&#10004;</div>
+                <h3>Conversion Successful!</h3>
+                <p>Your Joomla template is ready to download.</p>
+
+                <div class="positions-list" id="positionsList"></div>
+
+                <div class="download-section">
+                    <a href="#" class="btn btn-success" id="downloadBtn">
+                        &#8595; Download Template ZIP
+                    </a>
+                </div>
+
+                <div class="preview-section">
+                    <button type="button" class="preview-toggle" id="previewToggle">
+                        Show index.php preview
+                    </button>
+                    <pre class="preview-code" id="previewCode"></pre>
+                </div>
+            </div>
+
+            <div class="result-error" id="resultError" style="display: none;">
+                <h3>Conversion Failed</h3>
+                <p id="errorMessage"></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Powered by <a href="#">WebCopyAI</a> - No cloud APIs, fully local processing</p>
+        </footer>
+    </div>
+
+    <!-- Progress Overlay -->
+    <div class="progress-overlay" id="progressOverlay">
+        <div class="progress-card">
+            <div class="progress-spinner"></div>
+            <div class="progress-text">Converting...</div>
+            <div class="progress-subtext" id="progressSubtext">Downloading website assets</div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // File drop handling
+        const fileDrop = document.getElementById('fileDrop');
+        const fileInput = document.getElementById('fileInput');
+        const selectedFile = document.getElementById('selectedFile');
+        const fileName = document.getElementById('fileName');
+        const removeFile = document.getElementById('removeFile');
+
+        fileDrop.addEventListener('click', () => fileInput.click());
+
+        fileDrop.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDrop.classList.add('dragover');
+        });
+
+        fileDrop.addEventListener('dragleave', () => {
+            fileDrop.classList.remove('dragover');
+        });
+
+        fileDrop.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDrop.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                showSelectedFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                showSelectedFile(fileInput.files[0]);
+            }
+        });
+
+        function showSelectedFile(file) {
+            fileName.textContent = file.name;
+            selectedFile.style.display = 'flex';
+            fileDrop.style.display = 'none';
+        }
+
+        removeFile.addEventListener('click', () => {
+            fileInput.value = '';
+            selectedFile.style.display = 'none';
+            fileDrop.style.display = 'block';
+        });
+
+        // Form submission
+        const form = document.getElementById('converterForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressOverlay = document.getElementById('progressOverlay');
+        const progressSubtext = document.getElementById('progressSubtext');
+        const results = document.getElementById('results');
+        const resultSuccess = document.getElementById('resultSuccess');
+        const resultError = document.getElementById('resultError');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const activeTab = document.querySelector('.tab.active').dataset.tab;
+            const formData = new FormData();
+
+            if (activeTab === 'url') {
+                const url = document.getElementById('urlInput').value.trim();
+                if (!url) {
+                    alert('Please enter a URL');
+                    return;
+                }
+                formData.append('url', url);
+                progressSubtext.textContent = 'Downloading website assets...';
+            } else {
+                if (!fileInput.files.length) {
+                    alert('Please select a file');
+                    return;
+                }
+                formData.append('file', fileInput.files[0]);
+                progressSubtext.textContent = 'Processing uploaded files...';
+            }
+
+            const templateName = document.getElementById('templateName').value.trim();
+            if (templateName) {
+                formData.append('template_name', templateName);
+            }
+
+            // Show progress
+            progressOverlay.classList.add('show');
+            results.classList.remove('show');
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/convert/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Get response text first to handle non-JSON responses
+                const responseText = await response.text();
+                let data;
+
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseErr) {
+                    // Response was not valid JSON (e.g., Django error page)
+                    console.error('Non-JSON response:', responseText);
+                    throw new Error('Server error. Please check if the URL is accessible and try again.');
+                }
+
+                if (data.success) {
+                    // Show success
+                    resultSuccess.style.display = 'block';
+                    resultError.style.display = 'none';
+
+                    // Show positions
+                    const positionsList = document.getElementById('positionsList');
+                    positionsList.innerHTML = data.positions.map(p =>
+                        `<span class="position-badge">${p}</span>`
+                    ).join('');
+
+                    // Set download link
+                    document.getElementById('downloadBtn').href = data.download_url;
+
+                    // Store session for preview
+                    window.currentSession = data.session_id;
+
+                    // Reset preview
+                    document.getElementById('previewCode').classList.remove('show');
+                    document.getElementById('previewToggle').textContent = 'Show index.php preview';
+
+                } else {
+                    // Show error from server
+                    resultSuccess.style.display = 'none';
+                    resultError.style.display = 'block';
+                    document.getElementById('errorMessage').textContent = data.error || 'Unknown error occurred';
+                }
+
+                results.classList.add('show');
+
+            } catch (err) {
+                console.error('Conversion error:', err);
+                resultSuccess.style.display = 'none';
+                resultError.style.display = 'block';
+                document.getElementById('errorMessage').textContent = err.message || 'Connection error. Please try again.';
+                results.classList.add('show');
+            } finally {
+                progressOverlay.classList.remove('show');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Preview toggle
+        document.getElementById('previewToggle').addEventListener('click', async () => {
+            const previewCode = document.getElementById('previewCode');
+            const toggle = document.getElementById('previewToggle');
+
+            if (previewCode.classList.contains('show')) {
+                previewCode.classList.remove('show');
+                toggle.textContent = 'Show index.php preview';
+            } else {
+                // Fetch preview
+                try {
+                    const response = await fetch(`/preview/${window.currentSession}/`);
+                    const data = await response.json();
+                    previewCode.textContent = data.content;
+                    previewCode.classList.add('show');
+                    toggle.textContent = 'Hide index.php preview';
+                } catch (err) {
+                    alert('Failed to load preview');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

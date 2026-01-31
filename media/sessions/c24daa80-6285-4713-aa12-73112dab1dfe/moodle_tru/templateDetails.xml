@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="template" client="site" method="upgrade">
+    <name>moodle_tru</name>
+    <version>1.0.0</version>
+    <creationDate>2026-01-28</creationDate>
+    <author>Template Converter</author>
+    <authorEmail>info@example.com</authorEmail>
+    <authorUrl>https://example.com</authorUrl>
+    <copyright>Copyright (C) 2026. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later</license>
+    <description>Converted template: moodle_tru</description>
+    <inheritable>1</inheritable>
+
+    <files>
+        <filename>index.php</filename>
+        <filename>error.php</filename>
+        <filename>component.php</filename>
+        <folder>css</folder>
+        <folder>js</folder>
+        <folder>images</folder>
+    </files>
+
+    <positions>
+        <position>component</position>
+        <position>footer</position>
+        <position>header</position>
+        <position>menu</position>
+        <position>sidebar</position>
+    </positions>
+</extension>
